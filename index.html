@@ -1,0 +1,49 @@
+DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naija Vibes</title>
+  </head>
+  <body>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+<div class="app">
+  <header class="top">
+    <h2>🇳🇬 Naija <span>Vibes</span></h2>
+    <p>Real people. Real vibes.</p>
+  </header>
+
+  <main id="feed">
+    <section class="video">
+      <div class="content">
+        <div class="emoji">😂🇳🇬</div>
+        <h1>Welcome to Naija Vibes!</h1>
+        <p>Your next favourite video is here.</p>
+      </div>
+      <div class="actions">
+        <button onclick="likeVideo(this)">❤️ <b>0</b></button>
+        <button onclick="showComments()">💬 Comment</button>
+      </div>
+      <p class="creator">@naijavibes</p>
+    </section>
+  </main>
+
+  <footer>
+    <label class="upload">
+      ＋ Upload video
+      <input type="file" accept="video/*" onchange="uploadVideo(event)">
+    </label>
+  </footer>
+
+  <div id="comments" class="comments">
+    <h3>Comments</h3>
+    <div id="commentList">Be the first to comment!</div>
+    <input id="commentInput" placeholder="Write a comment...">
+    <button onclick="addComment()">Post</button>
+    <button onclick="hideComments()">Close</button>
+  </div>
+</div>
