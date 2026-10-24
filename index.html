@@ -165,5 +165,133 @@ input.addEventListener('change',()=>{
     "sb_publishable_LF6JzDv6frQkbzgCP9gZiQ_23KQfWBf
   );
 </script>
+  
+<!-- Naija Vibes: Account section -->
+<section id="account-section" style="max-width:420px;margin:30px auto;padding:20px;background:#171717;color:white;border-radius:16px;font-family:Arial,sans-serif;">
+  <h2 style="text-align:center;">🎬 Naija Vibes</h2>
+  <p style="text-align:center;">Create your account or log in</p>
+
+  <label for="nv-email">Email address</label>
+  <input id="nv-email" type="email" autocomplete="email" placeholder="Enter your email"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border-radius:8px;">
+
+  <label for="nv-password">Password</label>
+  <input id="nv-password" type="password" autocomplete="current-password" placeholder="At least 6 characters"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border-radius:8px;">
+
+  <button id="nv-signup" type="button"
+    style="width:100%;padding:12px;margin-bottom:10px;background:#ff3155;color:white;border:0;border-radius:8px;">
+    Sign Up
+  </button>
+
+  <button id="nv-login" type="button"
+    style="width:100%;padding:12px;background:#333;color:white;border:0;border-radius:8px;">
+    Log In
+  </button>
+
+  <button id="nv-logout" type="button" hidden
+    style="width:100%;padding:12px;margin-top:10px;background:#555;color:white;border:0;border-radius:8px;">
+    Log Out
+  </button>
+
+  <p id="nv-message" role="status" aria-live="polite"></p>
+</section>
+
+<script>
+(() => {
+  const client = window.supabaseClient || window.supabase;
+  // Use the client created by your existing connection code.
+  const db = typeof supabaseClient !== "undefined"
+    ? supabaseClient
+    : null;
+
+  const email = document.getElementById("nv-email");
+  const password = document.getElementById("nv-password");
+  const message = document.getElementById("nv-message");
+  const signup = document.getElementById("nv-signup");
+  const login = document.getElementById("nv-login");
+  const logout = document.getElementById("nv-logout");
+
+  function show(text) {
+    message.textContent = text;
+  }
+
+  if (!db) {
+    show("Connection not ready. Please check the Supabase setup.");
+    return;
+  }
+
+  signup.addEventListener("click", async () => {
+    const e = email.value.trim();
+    const p = password.value;
+
+    if (!e || p.length < 6) {
+      show("Enter a valid email and a password of at least 6 characters.");
+      return;
+    }
+
+    signup.disabled = true;
+    show("Creating your account…");
+
+    try {
+      const { data, error } = await db.auth.signUp({
+        email: e,
+        password: p,
+        options: {
+          emailRedirectTo: window.location.origin +
+            "/Naija-vibes-website-file-/"
+        }
+      });
+
+      if (error) throw error;
+
+      show(data.session
+        ? "Account created! You are signed in."
+        : "Account created. Check your email to confirm your account before logging in.");
+    } catch (err) {
+      show(err.message || "Could not create your account.");
+    } finally {
+      signup.disabled = false;
+    }
+  });
+
+  login.addEventListener("click", async () => {
+    const e = email.value.trim();
+    const p = password.value;
+
+    if (!e || !p) {
+      show("Enter your email and password.");
+      return;
+    }
+
+    login.disabled = true;
+    show("Logging in…");
+
+    try {
+      const { error } = await db.auth.signInWithPassword({
+        email: e,
+        password: p
+      });
+
+      if (error) throw error;
+      show("You are logged in to Naija Vibes!");
+    } catch (err) {
+      show(err.message || "Login failed.");
+    } finally {
+      login.disabled = false;
+    }
+  });
+
+  logout.addEventListener("click", async () => {
+    const { error } = await db.auth.signOut();
+    show(error ? error.message : "You have logged out.");
+  });
+
+  db.auth.onAuthStateChange((_event, session) => {
+    logout.hidden = !session;
+    if (session) show("Logged in successfully.");
+  });
+})();
+</script>
 </body>
 </html>
