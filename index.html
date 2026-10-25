@@ -2,473 +2,463 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090910">
-  <title>Naija Vibes</title>
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: #090910;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background: #101019;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #292936;
-    }
-
-    .logo {
-      font-size: 22px;
-      font-weight: 900;
-      color: #31e6a1;
-    }
-
-    .logo span { color: #ff477e; }
-
-    button, .upload {
-      border: 0;
-      border-radius: 22px;
-      padding: 11px 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    nav {
-      display: flex;
-      justify-content: space-around;
-      padding: 13px 5px;
-      background: #101019;
-      position: sticky;
-      top: 57px;
-      z-index: 4;
-    }
-
-    nav a {
-      color: #aaa;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    nav a:first-child {
-      color: #31e6a1;
-      font-weight: bold;
-    }
-
-    main {
-      max-width: 650px;
-      margin: auto;
-      padding: 15px;
-    }
-
-    .intro { padding: 15px 0; }
-
-    .intro h1 { font-size: 27px; }
-
-    .intro p, .uploadbox p {
-      color: #aaa;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .uploadbox {
-      background: #171722;
-      border: 1px dashed #55556b;
-      border-radius: 16px;
-      padding: 18px;
-      margin: 14px 0;
-      text-align: center;
-    }
-
-    #videoInput { display: none; }
-
-    .upload {
-      display: inline-block;
-      margin-top: 5px;
-      background: #31e6a1;
-      color: #080810;
-    }
-
-    #feed {
-      display: grid;
-      gap: 20px;
-    }
-
-    .card {
-      background: #14141e;
-      border: 1px solid #292936;
-      border-radius: 18px;
-      overflow: hidden;
-    }
-
-    .player {
-      background: #000;
-      min-height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .player video {
-      width: 100%;
-      max-height: 72vh;
-      min-height: 250px;
-      object-fit: contain;
-      background: #000;
-    }
-
-    .empty {
-      padding: 35px 20px;
-      text-align: center;
-      color: #bbb;
-      line-height: 1.7;
-    }
-
-    .info { padding: 14px; }
-
-    .creator { font-weight: bold; }
-
-    .caption {
-      color: #ddd;
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 13px;
-    }
-
-    .actions button {
-      background: #272735;
-      color: white;
-      font-size: 13px;
-    }
-
-    .actions button.liked { color: #ff477e; }
-
-    .download {
-      color: #31e6a1;
-      padding: 11px;
-      font-size: 13px;
-    }
-
-    #account-section {
-      max-width: 420px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #171717;
-      border-radius: 16px;
-    }
-
-    #account-section input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0 16px;
-      border-radius: 8px;
-      border: 1px solid #393949;
-      background: #0c0c14;
-      color: white;
-    }
-
-    .account-button {
-      width: 100%;
-      margin: 5px 0;
-      background: #ff3155;
-      color: white;
-    }
-
-    .secondary-button { background: #333; }
-
-    #nv-message {
-      font-size: 14px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-    }
-
-    footer {
-      text-align: center;
-      color: #777;
-      padding: 25px;
-      font-size: 12px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#09090b">
+<title>Naija Vibes</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--pink:#ff3158;--bg:#09090b;--panel:#18181b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+header{position:fixed;z-index:10;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:15px 16px;background:linear-gradient(#000b,transparent)}
+.brand{font-size:22px;font-weight:900;letter-spacing:-1px}
+.brand span{color:var(--pink)}
+.header-btn{background:#ffffff20;color:white;border:1px solid #ffffff30;border-radius:22px;padding:8px 12px}
+#feed{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory}
+.video-card{height:100dvh;position:relative;scroll-snap-align:start;background:#151515;overflow:hidden}
+.video-card video{width:100%;height:100%;object-fit:contain;background:#090909}
+.video-card video.filled{object-fit:cover}
+.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(transparent 50%,#000b 100%)}
+.side-actions{position:absolute;right:12px;bottom:112px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.action{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:transparent;color:white;font-size:12px;text-shadow:0 1px 5px #000;padding:0}
+.action .symbol{font-size:30px;line-height:1.1;filter:drop-shadow(0 1px 3px #000)}
+.action.liked .symbol{color:var(--pink)}
+.creator{position:absolute;left:14px;right:82px;bottom:91px;text-shadow:0 1px 5px #000}
+.creator strong{font-size:15px}
+.caption{font-size:14px;margin:8px 0}
+.sound-line{display:flex;align-items:center;gap:8px;font-size:13px;overflow:hidden;white-space:nowrap}
+.sound-line span{overflow:hidden;text-overflow:ellipsis}
+.music-disc{display:inline-flex;align-items:center;justify-content:center;width:29px;height:29px;border:2px solid white;border-radius:50%;font-size:15px}
+.bottom-nav{position:fixed;z-index:15;bottom:0;left:0;right:0;padding:10px 8px max(10px,env(safe-area-inset-bottom));display:flex;justify-content:space-around;background:#080808ed;border-top:1px solid #ffffff16}
+.nav-btn{background:none;border:0;color:#aaa;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px}
+.nav-btn b{font-size:23px;color:white}
+.nav-btn.active{color:white}
+.nav-btn.active b{color:var(--pink)}
+#account-panel,#upload-panel,#comments-panel{position:fixed;z-index:30;inset:0;background:#000c;display:none;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:520px;background:#18181b;border-radius:22px 22px 0 0;padding:22px 18px max(22px,env(safe-area-inset-bottom));max-height:88dvh;overflow:auto}
+.sheet h2{margin:0 0 14px}
+.sheet input,.sheet textarea{display:block;width:100%;margin:10px 0;padding:13px;border-radius:10px;border:1px solid #444;background:#09090b;color:white}
+.sheet textarea{min-height:75px;resize:vertical}
+.primary{width:100%;padding:13px;border:0;border-radius:12px;background:var(--pink);color:white;font-weight:bold;margin-top:8px}
+.secondary{width:100%;padding:12px;border:1px solid #444;border-radius:12px;background:transparent;color:white;margin-top:8px}
+.close{float:right;background:none;color:white;border:0;font-size:23px}
+#status{font-size:13px;color:#ccc;line-height:1.5;margin:12px 0}
+.empty{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:35px;color:#ddd}
+.empty button{background:var(--pink);border:0;color:white;padding:12px 16px;border-radius:12px;margin-top:12px}
+.comment{padding:10px 0;border-bottom:1px solid #333;font-size:14px}
+#sound-picker{width:100%;padding:12px;background:#09090b;color:white;border:1px solid #444;border-radius:10px;margin:8px 0}
+@media(min-width:600px){.video-card{max-width:470px;margin:auto}.bottom-nav{left:50%;right:auto;transform:translateX(-50%);width:470px}.side-actions{right:14px}}
+</style>
 </head>
-
 <body>
-  <header>
-    <div class="logo">NAIJA <span>VIBES</span> 🇳🇬</div>
-    <button onclick="document.getElementById('videoInput').click()">
-      ＋ Upload
-    </button>
-  </header>
+<header>
+  <div class="brand">Naija <span>Vibes</span> 🇳🇬</div>
+  <button class="header-btn" onclick="openAccount()">👤 Account</button>
+</header>
 
-  <nav>
-    <a href="#home">For You</a>
-    <a href="#feed">Trending</a>
-    <a href="#upload">Upload</a>
-    <a href="#profile">Profile</a>
-  </nav>
+<main id="feed">
+  <div class="empty" id="welcome">
+    <div>
+      <div style="font-size:46px">🎬</div>
+      <h2>Welcome to Naija Vibes</h2>
+      <p>Short videos. Big vibes. Naija everywhere.</p>
+      <button onclick="openUpload()">＋ Add your first video</button>
+      <p id="welcome-status">Loading your video feed…</p>
+    </div>
+  </div>
+</main>
 
-  <main id="home">
-    <section class="intro">
-      <h1>Your people. Your vibes. 🔥</h1>
-      <p>Discover Nigerian comedy, music, dance, lifestyle and amazing creators.</p>
-    </section>
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="goHome()"><b>⌂</b>Home</button>
+  <button class="nav-btn" onclick="openSearch()"><b>⌕</b>Discover</button>
+  <button class="nav-btn" onclick="openUpload()"><b>⊕</b>Upload</button>
+  <button class="nav-btn" onclick="openAccount()"><b>♙</b>Profile</button>
+</nav>
 
-    <section class="uploadbox" id="upload">
-      <div style="font-size:30px">🎬</div>
-      <strong>Share your vibe with Nigeria</strong>
-      <p>Choose a video to preview it on this device.</p>
-      <label class="upload" for="videoInput">＋ Choose a video</label>
-      <input id="videoInput" type="file" accept="video/*" multiple>
-    </section>
+<div id="account-panel" onclick="panelBackdrop(event,'account-panel')">
+ <section class="sheet">
+  <button class="close" onclick="closePanel('account-panel')">×</button>
+  <h2>Naija Vibes Account</h2>
+  <div id="auth-status">Checking connection…</div>
+  <div id="auth-form">
+   <input id="email" type="email" placeholder="Your email address" autocomplete="email">
+   <input id="password" type="password" placeholder="Password (at least 6 characters)" autocomplete="current-password">
+   <button class="primary" onclick="signIn('signup')">Create account</button>
+   <button class="secondary" onclick="signIn('login')">Log in</button>
+  </div>
+  <button id="logout-btn" class="secondary" style="display:none" onclick="signOut()">Log out</button>
+  <p id="account-message"></p>
+ </section>
+</div>
 
-    <section id="feed">
-      <div class="card">
-        <div class="empty">
-          <div style="font-size:45px">🇳🇬</div>
-          <strong>Welcome to Naija Vibes!</strong><br>
-          Your video feed starts here.<br>
-          Choose a video above to try it out.
-        </div>
-      </div>
-    </section>
+<div id="upload-panel" onclick="panelBackdrop(event,'upload-panel')">
+ <section class="sheet">
+  <button class="close" onclick="closePanel('upload-panel')">×</button>
+  <h2>＋ Upload a video</h2>
+  <p>Choose a video from your device.</p>
+  <input id="video-file" type="file" accept="video/mp4,video/quicktime,video/webm,video/*">
+  <input id="video-title" type="text" maxlength="100" placeholder="Video caption or title">
+  <label for="sound-picker">Music or sound</label>
+  <select id="sound-picker">
+   <option value="original">Original sound</option>
+   <option value="music">Music added to your video</option>
+  </select>
+  <p style="font-size:12px;color:#aaa">The video’s existing audio plays with the video. This form does not add a separate music track.</p>
+  <button class="primary" onclick="uploadVideo()">Upload video</button>
+  <p id="upload-status"></p>
+ </section>
+</div>
 
-    <section id="profile" class="intro">
-      <h2>🌟 Naija Vibes Creators</h2>
-      <p>Your journey to becoming a creator starts with sharing your first video.</p>
-    </section>
+<div id="comments-panel" onclick="panelBackdrop(event,'comments-panel')">
+ <section class="sheet">
+  <button class="close" onclick="closePanel('comments-panel')">×</button>
+  <h2>Comments</h2>
+  <div id="comments-list">Comments will appear here.</div>
+  <input id="comment-input" placeholder="Write a comment…">
+  <button class="primary" onclick="addComment()">Post comment</button>
+  <p id="comment-status"></p>
+ </section>
+</div>
 
-    <section id="account-section">
-      <h2 style="text-align:center">🎬 Naija Vibes</h2>
-      <p style="text-align:center">Create your account or log in</p>
+<script>
+(() => {
+const SUPABASE_URL = "https://wfuukpvwmxirtkalfsvr.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+let db = null;
+let currentUser = null;
+let videos = [];
+let activeVideo = null;
+let localLikes = new Set();
+let localComments = {};
+let localVideoUrls = new Map();
 
-      <label for="nv-email">Email address</label>
-      <input id="nv-email" type="email" autocomplete="email"
-             placeholder="Enter your email">
+const $ = id => document.getElementById(id);
+const status = (id, message) => { $(id).textContent = message; };
 
-      <label for="nv-password">Password</label>
-      <input id="nv-password" type="password"
-             autocomplete="current-password"
-             placeholder="Enter your password">
+if (window.supabase && SUPABASE_PUBLISHABLE_KEY !== "sb_publishable_LF6JzDv6frQkbzgCP9gZiQ_23KQfWBf") {
+  try {
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  } catch (e) {
+    console.error(e);
+  }
+}
 
-      <button id="nv-signup" class="account-button" type="button">
-        Sign Up
-      </button>
+function requireDb() {
+  if (!db) {
+    alert("Supabase is not configured. Check the Publishable key in index.html.");
+    return false;
+  }
+  return true;
+}
 
-      <button id="nv-login" class="account-button secondary-button" type="button">
-        Log In
-      </button>
+function openPanel(id) { $(id).style.display = "flex"; }
+function closePanel(id) { $(id).style.display = "none"; }
+window.closePanel = closePanel;
+window.panelBackdrop = (event,id) => {
+  if (event.target.id === id) closePanel(id);
+};
 
-      <button id="nv-logout" class="account-button secondary-button"
-              type="button" hidden>
-        Log Out
-      </button>
+window.openAccount = async () => {
+  openPanel("account-panel");
+  if (!db) {
+    status("auth-status","Supabase is not configured. Check your Publishable key.");
+    return;
+  }
+  const {data:{session}} = await db.auth.getSession();
+  currentUser = session?.user || null;
+  renderAuth();
+};
+window.openUpload = () => {
+  openPanel("upload-panel");
+  if (!currentUser) status("upload-status","Please log in before uploading.");
+};
+window.goHome = () => {
+  $("feed").scrollTo({top:0,behavior:"smooth"});
+  loadVideos();
+};
+window.openSearch = () => {
+  const term = prompt("Search captions or creators:");
+  if (term) {
+    const cards = [...document.querySelectorAll(".video-card")];
+    cards.forEach(card => card.style.display =
+      card.dataset.search?.includes(term.toLowerCase()) ? "" : "none");
+  }
+};
+window.signIn = async mode => {
+  if (!requireDb()) return;
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if (!email || !password) {
+    status("account-message","Enter your email and password.");
+    return;
+  }
+  status("account-message","Please wait…");
+  let result;
+  if (mode === "signup") {
+    result = await db.auth.signUp({email,password});
+    if (!result.error) {
+      status("account-message","Account created. Check your email to confirm your account before logging in.");
+      return;
+    }
+  } else {
+    result = await db.auth.signInWithPassword({email,password});
+  }
+  if (result.error) {
+    status("account-message",result.error.message);
+    return;
+  }
+  currentUser = result.data.user;
+  renderAuth();
+  status("account-message","You are logged in to Naija Vibes!");
+  await loadVideos();
+};
+window.signOut = async () => {
+  if (!requireDb()) return;
+  const {error} = await db.auth.signOut();
+  if (error) return status("account-message",error.message);
+  currentUser = null;
+  renderAuth();
+  status("account-message","You have logged out.");
+};
+function renderAuth() {
+  $("auth-form").style.display = currentUser ? "none" : "block";
+  $("logout-btn").style.display = currentUser ? "block" : "none";
+  status("auth-status",currentUser
+    ? "Logged in as " + currentUser.email
+    : db ? "Supabase client loaded. You can sign up or log in." : "Supabase is not configured.");
+}
+if (db) {
+  db.auth.getSession().then(({data}) => {
+    currentUser = data.session?.user || null;
+    renderAuth();
+    loadVideos();
+  });
+  db.auth.onAuthStateChange((_event, session) => {
+    currentUser = session?.user || null;
+    renderAuth();
+  });
+} else {
+  status("welcome-status","Add your Supabase Publishable key to enable accounts and uploads.");
+}
 
-      <p id="nv-message" role="status" aria-live="polite">
-        Checking connection…
-      </p>
-    </section>
-  </main>
+window.uploadVideo = async () => {
+  if (!requireDb()) return;
+  if (!currentUser) {
+    status("upload-status","Please log in first.");
+    return;
+  }
+  const file = $("video-file").files[0];
+  if (!file) return status("upload-status","Choose a video first.");
+  if (file.size > 50 * 1024 * 1024) {
+    return status("upload-status","This file is over 50 MB. Choose a smaller video.");
+  }
+  const allowed = ["video/mp4","video/quicktime","video/webm"];
+  if (file.type && !allowed.includes(file.type)) {
+    return status("upload-status","Choose an MP4, MOV, or WebM video.");
+  }
+  status("upload-status","Uploading video…");
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const path = `${currentUser.id}/${Date.now()}-${safeName}`;
+  const upload = await db.storage.from("videos").upload(path,file,{contentType:file.type || "video/mp4",upsert:false});
+  if (upload.error) {
+    return status("upload-status","Upload failed: " + upload.error.message);
+  }
+  const record = {
+    user_id: currentUser.id,
+    title: $("video-title").value.trim() || file.name,
+    description: $("video-title").value.trim() || "",
+    storage_path: path
+  };
+  const saved = await db.from("videos").insert(record).select().single();
+  if (saved.error) {
+    status("upload-status","The file uploaded, but its video record could not be saved: " + saved.error.message + ". The database column names may need adjusting.");
+    return;
+  }
+  localVideoUrls.set(path,URL.createObjectURL(file));
+  status("upload-status","Video uploaded!");
+  $("video-file").value = "";
+  $("video-title").value = "";
+  await loadVideos();
+  closePanel("upload-panel");
+};
 
-  <footer>Naija Vibes © 2026 · Made for the culture 🇳🇬</footer>
+async function getVideoUrl(row) {
+  if (row.storage_path && localVideoUrls.has(row.storage_path)) return localVideoUrls.get(row.storage_path);
+  if (row.storage_path && db) {
+    const {data,error} = await db.storage.from("videos").createSignedUrl(row.storage_path,3600);
+    if (!error && data?.signedUrl) return data.signedUrl;
+  }
+  return row.video_url || row.url || "";
+}
 
-  <!-- Local video preview only; not an online upload yet -->
-  <script>
-    const input = document.getElementById("videoInput");
-    const feed = document.getElementById("feed");
+window.loadVideos = async () => {
+  if (!db) return;
+  status("welcome-status","Loading videos…");
+  const result = await db.from("videos").select("*").order("created_at",{ascending:false}).limit(50);
+  if (result.error) {
+    status("welcome-status","Could not load videos: " + result.error.message);
+    return;
+  }
+  videos = result.data || [];
+  const feed = $("feed");
+  feed.querySelectorAll(".video-card").forEach(card => card.remove());
+  $("welcome").style.display = videos.length ? "none" : "flex";
+  if (!videos.length) {
+    status("welcome-status","No videos found yet. Upload one to get started.");
+    return;
+  }
+  for (const row of videos) {
+    const url = await getVideoUrl(row);
+    if (url) feed.appendChild(makeVideoCard(row,url));
+  }
+  if (!feed.querySelector(".video-card")) {
+    $("welcome").style.display = "flex";
+    status("welcome-status","No playable video URLs found. Check storage access and database fields.");
+  }
+};
 
-    input.addEventListener("change", () => {
-      [...input.files].forEach(file => {
-        if (!file.type.startsWith("video/")) return;
+function makeVideoCard(row,url) {
+  const id = row.id ?? row.storage_path ?? url;
+  const title = row.title || row.description || "Naija vibes 🇳🇬";
+  const username = row.username || row.creator_name || "Naija creator";
+  const card = document.createElement("section");
+  card.className = "video-card";
+  card.dataset.id = id;
+  card.dataset.search = (title + " " + username).toLowerCase();
 
-        const url = URL.createObjectURL(file);
-        const card = document.createElement("article");
-        card.className = "card";
+  const video = document.createElement("video");
+  video.src = url;
+  video.playsInline = true;
+  video.loop = true;
+  video.controls = false;
+  video.preload = "metadata";
+  video.addEventListener("click",() => video.paused ? video.play().catch(()=>{}) : video.pause());
+  video.addEventListener("loadedmetadata",() => video.classList.add("filled"));
 
-        const player = document.createElement("div");
-        player.className = "player";
+  const shade = document.createElement("div");
+  shade.className = "shade";
+  const creator = document.createElement("div");
+  creator.className = "creator";
+  const name = document.createElement("strong");
+  name.textContent = "@" + username;
+  const caption = document.createElement("p");
+  caption.className = "caption";
+  caption.textContent = title;
+  const sound = document.createElement("div");
+  sound.className = "sound-line";
+  sound.innerHTML = '<span class="music-disc">♫</span>';
+  const soundText = document.createElement("span");
+  soundText.textContent = "Original sound · Tap to try this sound";
+  sound.appendChild(soundText);
+  sound.onclick = () => {
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(()=>{});
+    alert("Playing this video's original audio. Separate music tracks can be added in a future update.");
+  };
+  creator.append(name,caption,sound);
 
-        const video = document.createElement("video");
-        video.src = url;
-        video.controls = true;
-        video.playsInline = true;
-        video.preload = "metadata";
-        player.appendChild(video);
+  const actions = document.createElement("div");
+  actions.className = "side-actions";
+  actions.append(
+    actionButton("♥","Like",() => {
+      if (localLikes.has(id)) localLikes.delete(id); else localLikes.add(id);
+      renderLike();
+    }),
+    actionButton("▢","Comments",() => {activeVideo=row;openComments(row);}),
+    actionButton("↗","Share",() => shareVideo(row,url)),
+    actionButton("♫","Sound",() => {
+      video.currentTime=0;video.muted=false;video.play().catch(()=>{});
+      soundText.textContent="Now playing · Original sound";
+    })
+  );
+  const likeBtn = actions.children[0];
+  function renderLike() {
+    likeBtn.classList.toggle("liked",localLikes.has(id));
+    likeBtn.querySelector(".symbol").textContent = localLikes.has(id) ? "♥" : "♡";
+  }
+  card.append(video,shade,creator,actions);
+  return card;
+}
 
-        const info = document.createElement("div");
-        info.className = "info";
+function actionButton(symbol,label,callback) {
+  const button=document.createElement("button");
+  button.className="action";
+  const icon=document.createElement("span");
+  icon.className="symbol";
+  icon.textContent=symbol;
+  const text=document.createElement("span");
+  text.textContent=label;
+  button.append(icon,text);
+  button.onclick=callback;
+  return button;
+}
+window.shareVideo = async (row,url) => {
+  const link = location.href.split("#")[0] + "#video-" + encodeURIComponent(row.id || "");
+  if (navigator.share) {
+    try { await navigator.share({title:row.title || "Naija Vibes",text:"Watch this on Naija Vibes!",url:link}); return; } catch(e) {}
+  }
+  try {
+    await navigator.clipboard.writeText(link);
+    alert("Video link copied. Share it with your friends!");
+  } catch(e) {
+    prompt("Copy this link:",link);
+  }
+};
 
-        const creator = document.createElement("div");
-        creator.className = "creator";
-        creator.textContent = "🇳🇬 @naijavibes";
+window.openComments = row => {
+  openPanel("comments-panel");
+  $("comment-input").value="";
+  const id=String(row.id ?? row.storage_path ?? "");
+  const comments=localComments[id] || [];
+  const list=$("comments-list");
+  list.replaceChildren();
+  if (!comments.length) list.textContent="No comments yet. Be the first!";
+  comments.forEach(item=>{
+    const div=document.createElement("div");
+    div.className="comment";
+    div.textContent=item;
+    list.appendChild(div);
+  });
+  status("comment-status","Comments are currently saved only in this browser.");
+};
+window.addComment = () => {
+  if (!activeVideo) return;
+  const value=$("comment-input").value.trim();
+  if (!value) return;
+  const id=String(activeVideo.id ?? activeVideo.storage_path ?? "");
+  localComments[id] ||= [];
+  localComments[id].push(value);
+  $("comment-input").value="";
+  openComments(activeVideo);
+  status("comment-status","Comment added on this device.");
+};
 
-        const caption = document.createElement("p");
-        caption.className = "caption";
-        caption.textContent = file.name;
-
-        const actions = document.createElement("div");
-        actions.className = "actions";
-
-        let liked = false;
-        const like = document.createElement("button");
-        like.textContent = "♡ Like 0";
-        like.onclick = () => {
-          liked = !liked;
-          like.textContent = (liked ? "♥ Like 1" : "♡ Like 0");
-          like.classList.toggle("liked", liked);
-        };
-
-        const download = document.createElement("a");
-        download.href = url;
-        download.download = file.name;
-        download.className = "download";
-        download.textContent = "⬇ Download";
-
-        const share = document.createElement("button");
-        share.textContent = "↗ Share";
-        share.onclick = async () => {
-          try {
-            if (navigator.share) {
-              await navigator.share({
-                title: "Naija Vibes",
-                text: "Check out Naija Vibes!",
-                url: location.href
-              });
-            } else {
-              alert("Copy the website link to share Naija Vibes.");
-            }
-          } catch (error) {}
-        };
-
-        actions.append(like, share, download);
-        info.append(creator, caption, actions);
-        card.append(player, info);
-        feed.prepend(card);
+const feedObserver = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    const video=entry.target.querySelector("video");
+    if (!video) return;
+    if (entry.isIntersecting && entry.intersectionRatio > .7) {
+      document.querySelectorAll(".video-card video").forEach(other=>{
+        if (other!==video) other.pause();
       });
+      video.play().catch(()=>{});
+    } else video.pause();
+  });
+},{threshold:[.2,.7]});
 
-      input.value = "";
-    });
-  </script>
+const originalAppend = Element.prototype.appendChild;
+const feedObserverObserver = new MutationObserver(mutations=>{
+  mutations.forEach(m=>m.addedNodes.forEach(node=>{
+    if(node.nodeType===1 && node.classList?.contains("video-card")) feedObserver.observe(node);
+  }));
+});
+feedObserverObserver.observe($("feed"),{childList:true});
 
-  <!-- Load Supabase before creating the client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-    // Replace the placeholder below with your REAL Supabase Publishable key.
-    // Never put a service_role or secret key in website code.
-    const supabaseClient = window.supabase.createClient(
-      "https://wfuukpvwmxirtkalfsvr.supabase.co",
-     "sb_publishable_LF6JzDv6frQkbzgCP9gZiQ_23KQfWBf"
-    );
-
-    (() => {
-      const db = supabaseClient;
-      const email = document.getElementById("nv-email");
-      const password = document.getElementById("nv-password");
-      const message = document.getElementById("nv-message");
-      const signup = document.getElementById("nv-signup");
-      const login = document.getElementById("nv-login");
-      const logout = document.getElementById("nv-logout");
-
-      function show(text) {
-        message.textContent = text;
-      }
-
-      if (!window.supabase || !db) {
-        show("Supabase could not load. Check your internet connection.");
-        signup.disabled = true;
-        login.disabled = true;
-        return;
-      }
-
-      show("Supabase client loaded. You can sign up or log in.");
-
-      signup.addEventListener("click", async () => {
-        const e = email.value.trim();
-        const p = password.value;
-
-        if (!e || p.length < 6) {
-          show("Enter your email and a password of at least 6 characters.");
-          return;
-        }
-
-        signup.disabled = true;
-        show("Creating your account…");
-
-        try {
-          const { data, error } = await db.auth.signUp({
-            email: e,
-            password: p,
-            options: {
-              emailRedirectTo:
-                "https://princeola001.github.io/Naija-vibes-website-file-/"
-            }
-          });
-
-          if (error) throw error;
-
-          show(data.session
-            ? "Account created! You are signed in."
-            : "Account created. Check your email to confirm your account before logging in.");
-        } catch (err) {
-          show(err.message || "Could not create your account.");
-        } finally {
-          signup.disabled = false;
-        }
-      });
-
-      login.addEventListener("click", async () => {
-        const e = email.value.trim();
-        const p = password.value;
-
-        if (!e || !p) {
-          show("Enter your email and password.");
-          return;
-        }
-
-        login.disabled = true;
-        show("Logging in…");
-
-        try {
-          const { error } = await db.auth.signInWithPassword({
-            email: e,
-            password: p
-          });
-
-          if (error) throw error;
-          show("You are logged in to Naija Vibes!");
-        } catch (err) {
-          show(err.message || "Login failed.");
-        } finally {
-          login.disabled = false;
-        }
-      });
-
-      logout.addEventListener("click", async () => {
-        const { error } = await db.auth.signOut();
-        show(error ? error.message : "You have logged out.");
-      });
-
-      db.auth.onAuthStateChange((_event, session) => {
-        logout.hidden = !session;
-        if (session) show("Logged in successfully.");
-      });
-    })();
-  </script>
+})();
+</script>
 </body>
 </html>
