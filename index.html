@@ -6,48 +6,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#080808">
   <title>Naija Vibes</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    *{box-sizing:border-box}
-    body{margin:0;background:#080808;color:white;font-family:Arial,sans-serif}
-    button,input,textarea{font:inherit}
-    button{cursor:pointer}
-    .top{position:fixed;top:0;left:0;right:0;z-index:5;padding:16px;text-align:center;background:linear-gradient(#000b,transparent)}
-    .brand{font-size:22px;font-weight:900;letter-spacing:-1px}
-    .brand span{color:#ff3158}
-    .top small{display:block;color:#ddd;margin-top:5px}
-    #feed{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory}
-    .video-card{height:100dvh;position:relative;scroll-snap-align:start;background:#151515;overflow:hidden}
-    .video-card video{width:100%;height:100%;object-fit:cover}
-    .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
-    .empty h1{font-size:32px;margin:0 0 12px}
-    .empty p{color:#ccc;line-height:1.5}
-    .add{border:0;border-radius:25px;padding:13px 22px;background:#ff3158;color:white;font-weight:bold}
-    .shade{position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#000b);pointer-events:none}
-    .details{position:absolute;left:15px;right:85px;bottom:100px;z-index:2}
-    .details h3{margin:0 0 8px;font-size:17px}
-    .details p{margin:0 0 12px;line-height:1.4;overflow-wrap:anywhere}
-    .sound{font-size:13px;color:#eee}
-    .rail{position:absolute;right:12px;bottom:115px;display:flex;flex-direction:column;gap:20px;align-items:center;z-index:3}
-    .action{border:0;background:transparent;color:white;text-align:center;padding:0;min-width:45px}
-    .action .emoji{display:block;font-size:29px;text-shadow:0 1px 4px #000}
-    .action small{display:block;font-size:12px;margin-top:4px}
-    .liked{color:#ff3158!important}
-    .nav{position:fixed;z-index:8;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#090909ed;border-top:1px solid #333;padding:12px 4px calc(12px + env(safe-area-inset-bottom))}
-    .nav button{background:none;border:0;color:#ddd;font-size:12px}
-    .nav span{display:block;font-size:22px;margin-bottom:4px}
-    .panel{display:none;position:fixed;z-index:10;inset:0;background:#101010;overflow:auto;padding:24px 18px 100px}
-    .panel h2{margin-top:20px}
-    .panel input,.panel textarea{display:block;width:100%;padding:13px;margin:10px 0;background:#222;border:1px solid #444;border-radius:9px;color:white}
-    .panel textarea{min-height:90px}
-    .panel button{margin:6px 5px 6px 0}
-    .close{float:right;background:#333;color:white;border:0;border-radius:20px;padding:8px 13px}
-    .muted{color:#bbb;font-size:13px;line-height:1.5}
-    .status{font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere;margin:15px 0;color:#ffd2dc}
-    .comment-row{padding:12px 0;border-bottom:1px solid #333}
-    .comment-row small{color:#aaa}
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #080808;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .top {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 5; padding: 16px; text-align: center;
+      background: linear-gradient(#000d, transparent);
+      pointer-events: none;
+    }
+    .brand { font-size: 22px; font-weight: 900; }
+    .brand span { color: #ff3158; }
+    .top small { display: block; color: #ddd; margin-top: 5px; }
+    #feed {
+      height: 100dvh; overflow-y: auto;
+      scroll-snap-type: y mandatory;
+    }
+    .video-card {
+      height: 100dvh; position: relative;
+      scroll-snap-align: start; background: #151515;
+      overflow: hidden;
+    }
+    .video-card video {
+      width: 100%; height: 100%; object-fit: contain;
+      background: #080808;
+    }
+    .empty {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 30px;
+    }
+    .empty h1 { font-size: 32px; margin: 0 0 12px; }
+    .empty p { color: #ccc; line-height: 1.5; }
+    .add {
+      border: 0; border-radius: 25px; padding: 13px 22px;
+      background: #ff3158; color: white; font-weight: bold;
+    }
+    .shade {
+      position: absolute; inset: 45% 0 0;
+      background: linear-gradient(transparent, #000b);
+      pointer-events: none;
+    }
+    .details {
+      position: absolute; left: 15px; right: 80px;
+      bottom: 105px; z-index: 2; overflow-wrap: anywhere;
+    }
+    .details h3 { margin: 0 0 8px; font-size: 17px; }
+    .details p { margin: 0 0 12px; line-height: 1.4; }
+    .sound { font-size: 13px; color: #eee; }
+    .rail {
+      position: absolute; right: 12px; bottom: 125px;
+      display: flex; flex-direction: column; gap: 20px;
+      align-items: center; z-index: 3;
+    }
+    .action {
+      border: 0; background: transparent; color: white;
+      text-align: center; padding: 0; min-width: 45px;
+    }
+    .action .emoji {
+      display: block; font-size: 29px;
+      text-shadow: 0 1px 4px #000;
+    }
+    .action small { display: block; font-size: 12px; margin-top: 4px; }
+    .liked { color: #ff3158 !important; }
+    .nav {
+      position: fixed; z-index: 8; bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: space-around;
+      background: #090909ed; border-top: 1px solid #333;
+      padding: 10px 2px calc(10px + env(safe-area-inset-bottom));
+    }
+    .nav button {
+      background: none; border: 0; color: #ddd;
+      font-size: 11px; min-width: 0;
+    }
+    .nav span { display: block; font-size: 22px; margin-bottom: 4px; }
+    .panel {
+      display: none; position: fixed; z-index: 10; inset: 0;
+      background: #101010; overflow: auto;
+      padding: 24px 18px 110px;
+    }
+    .panel h2 { margin-top: 25px; }
+    .panel input, .panel textarea {
+      display: block; width: 100%; padding: 13px;
+      margin: 10px 0; background: #222;
+      border: 1px solid #444; border-radius: 9px; color: white;
+    }
+    .panel textarea { min-height: 90px; }
+    .panel button { margin: 6px 5px 6px 0; }
+    .close {
+      float: right; background: #333; color: white;
+      border: 0; border-radius: 20px; padding: 8px 13px;
+    }
+    .muted { color: #bbb; font-size: 13px; line-height: 1.5; }
+    .status {
+      font-size: 14px; white-space: pre-wrap;
+      overflow-wrap: anywhere; margin: 15px 0; color: #ffd2dc;
+    }
+    .comment-row { padding: 12px 0; border-bottom: 1px solid #333; }
+    .comment-row small { color: #aaa; }
   </style>
 </head>
+
 <body>
   <header class="top">
     <div class="brand">NAIJA <span>VIBES</span></div>
@@ -69,7 +139,8 @@
     <button onclick="showHome()"><span>⌂</span>Home</button>
     <button onclick="openPanel('searchPanel')"><span>⌕</span>Discover</button>
     <button onclick="openPanel('uploadPanel')"><span>＋</span>Upload</button>
-    <button onclick="openPanel('accountPanel')"><span>♙</span>Account</button>
+    <button onclick="openPanel('profilePanel')"><span>♙</span>Profile</button>
+    <button onclick="openPanel('accountPanel')"><span>☻</span>Account</button>
   </nav>
 
   <section id="accountPanel" class="panel">
@@ -87,11 +158,11 @@
   <section id="uploadPanel" class="panel">
     <button class="close" onclick="closePanels()">Close ✕</button>
     <h2>Upload a video 🎬</h2>
-    <p class="muted">Choose a short video. MP4, MOV or WebM. Your current bucket limit is 50 MB.</p>
+    <p class="muted">Choose an MP4, MOV or WebM video. Maximum size: 50 MB.</p>
     <input id="videoFile" type="file" accept="video/mp4,video/quicktime,video/webm">
     <input id="videoTitle" maxlength="100" placeholder="Video title">
     <textarea id="videoCaption" maxlength="1000" placeholder="Write a caption…"></textarea>
-    <input id="videoSound" maxlength="100" placeholder="Sound label (e.g. Original sound)">
+    <input id="videoSound" maxlength="100" placeholder="Sound label (optional)">
     <button class="add" onclick="uploadVideo()">Upload video</button>
     <p id="uploadStatus" class="status"></p>
   </section>
@@ -116,24 +187,24 @@
   <section id="profilePanel" class="panel">
     <button class="close" onclick="closePanels()">Close ✕</button>
     <h2>Your profile</h2>
-    <p id="profileStatus" class="muted">Sign in to upload and manage your videos.</p>
+    <p id="profileStatus" class="muted">Checking profile…</p>
     <button class="add" onclick="openPanel('accountPanel')">Account settings</button>
     <button class="add" onclick="loadVideos()">Refresh videos</button>
   </section>
 
   <script>
-    // 1. Keep your URL and key from the SAME Supabase project.
+    // Replace the placeholder with your own Supabase Publishable key.
     const SUPABASE_URL = "https://wfuukpvwmxirtkalfsvr.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_LF6JzDv6frQkbzgCP9gZiQ_23KQfWBf";
-
     const BUCKET = "videos";
+
     let db = null;
     let currentUser = null;
     let allVideos = [];
-    let activeVideo = null;
     let activeCommentVideo = null;
 
     const $ = id => document.getElementById(id);
+
     const keyMissing =
       !SUPABASE_PUBLISHABLE_KEY ||
       SUPABASE_PUBLISHABLE_KEY === "sb_publishable_LF6JzDv6frQkbzgCP9gZiQ_23KQfWBf";
@@ -141,7 +212,7 @@
     if (window.supabase && !keyMissing) {
       db = window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY===  "sb_publishable_LF6JzDv6frQkbzgCP9gZiQ_23KQfWBf";
+        SUPABASE_PUBLISHABLE_KEY
       );
     }
 
@@ -152,11 +223,13 @@
     function openPanel(id) {
       document.querySelectorAll(".panel").forEach(p => p.style.display = "none");
       $(id).style.display = "block";
+
       if (id === "accountPanel") refreshAccount();
+
       if (id === "profilePanel") {
         message("profileStatus", currentUser
           ? "Signed in as " + currentUser.email
-          : "Sign in to upload and manage your videos.");
+          : "You are not signed in. Open Account to log in.");
       }
     }
 
@@ -173,12 +246,13 @@
       if (!db) {
         message("accountStatus", keyMissing
           ? "Add your Supabase Publishable key in the HTML first."
-          : "Supabase client could not load. Check your internet connection.");
+          : "Supabase did not initialize. Check your connection.");
         return;
       }
 
       const { data, error } = await db.auth.getUser();
       currentUser = data?.user || null;
+
       message("accountStatus", error
         ? error.message
         : currentUser
@@ -188,19 +262,22 @@
 
     async function signUp() {
       if (!db) return message("accountStatus", "Add your real Publishable key first.");
+
       const email = $("email").value.trim();
       const password = $("password").value;
 
       if (!email || password.length < 6) {
-        return message("accountStatus", "Enter a valid email and password of at least 6 characters.");
+        return message("accountStatus", "Enter a valid email and a password of at least 6 characters.");
       }
 
       message("accountStatus", "Creating account…");
+
       const { data, error } = await db.auth.signUp({ email, password });
 
       if (error) return message("accountStatus", error.message);
 
-      currentUser = data.user;
+      currentUser = data.user || null;
+
       message("accountStatus", data.session
         ? "Account created and logged in!"
         : "Account created. Check your email to confirm your account, then log in.");
@@ -208,10 +285,16 @@
 
     async function signIn() {
       if (!db) return message("accountStatus", "Add your real Publishable key first.");
+
       const email = $("email").value.trim();
       const password = $("password").value;
 
+      if (!email || !password) {
+        return message("accountStatus", "Enter your email and password.");
+      }
+
       message("accountStatus", "Logging in…");
+
       const { data, error } = await db.auth.signInWithPassword({ email, password });
 
       if (error) return message("accountStatus", error.message);
@@ -223,25 +306,31 @@
 
     async function signOut() {
       if (!db) return message("accountStatus", "Add your real Publishable key first.");
+
       const { error } = await db.auth.signOut();
+
       if (error) return message("accountStatus", error.message);
+
       currentUser = null;
       message("accountStatus", "You have logged out.");
     }
 
     async function uploadVideo() {
       if (!db) return message("uploadStatus", "Add your real Publishable key first.");
+
       const { data: userData, error: userError } = await db.auth.getUser();
       currentUser = userData?.user || null;
 
       if (userError || !currentUser) {
-        return message("uploadStatus", "Please log in before uploading.");
+        openPanel("accountPanel");
+        return message("accountStatus", "Please log in before uploading.");
       }
 
       const file = $("videoFile").files[0];
+
       if (!file) return message("uploadStatus", "Choose a video first.");
       if (file.size > 50 * 1024 * 1024) {
-        return message("uploadStatus", "This file is over the 50 MB bucket limit.");
+        return message("uploadStatus", "This video is over the 50 MB limit.");
       }
 
       const title = $("videoTitle").value.trim() || file.name;
@@ -263,12 +352,11 @@
         return message("uploadStatus", "Upload failed: " + storageError.message);
       }
 
-      // These fields must match the columns in public.videos.
       const { data: row, error: rowError } = await db
         .from("videos")
         .insert({
           user_id: currentUser.id,
-          title: title,
+          title,
           description: caption,
           storage_path: storagePath
         })
@@ -276,22 +364,20 @@
         .single();
 
       if (rowError) {
-        message("uploadStatus",
-          "The file uploaded, but the video record could not be saved: " +
-          rowError.message +
-          "\nCheck the public.videos columns and its INSERT policy.");
-        return;
+        return message("uploadStatus",
+          "The file uploaded, but saving its details failed: " + rowError.message);
       }
 
-      // Sound is displayed in the feed. This version doesn't require a sound column.
       row.sound_label = sound;
       allVideos.unshift(row);
       renderVideos(allVideos);
+
       message("uploadStatus", "Video uploaded successfully!");
       $("videoFile").value = "";
       $("videoTitle").value = "";
       $("videoCaption").value = "";
       $("videoSound").value = "";
+
       setTimeout(closePanels, 1200);
     }
 
@@ -299,7 +385,7 @@
       if (!db) {
         renderEmpty(keyMissing
           ? "Add your Supabase Publishable key to enable accounts and uploads."
-          : "Supabase did not initialize. Check the Supabase script and internet connection.");
+          : "Supabase did not initialize. Check your internet connection.");
         return;
       }
 
@@ -315,7 +401,7 @@
       }
 
       allVideos = data || [];
-      renderVideos(allVideos);
+      await renderVideos(allVideos);
     }
 
     function renderEmpty(text) {
@@ -331,7 +417,11 @@
 
     function escapeHTML(value) {
       return String(value ?? "").replace(/[&<>"']/g, c => ({
-        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
       }[c]));
     }
 
@@ -341,17 +431,22 @@
         return;
       }
 
-      $("feed").innerHTML = '<div class="video-card"><div class="empty"><p>Loading videos…</p></div></div>';
+      $("feed").innerHTML = `
+        <div class="video-card">
+          <div class="empty"><p>Loading videos…</p></div>
+        </div>`;
 
       const prepared = await Promise.all(rows.map(async row => {
         let url = row.video_url || row.url || "";
 
-        if (!url && row.storage_path) {
+        if (!url && row.storage_path && db) {
           const { data, error } = await db.storage
             .from(BUCKET)
             .createSignedUrl(row.storage_path, 3600);
+
           if (!error) url = data.signedUrl;
         }
+
         return { ...row, _url: url };
       }));
 
@@ -361,16 +456,17 @@
         const card = document.createElement("section");
         card.className = "video-card";
 
-        const video = document.createElement("video");
-        video.src = row._url || "";
-        video.controls = true;
-        video.playsInline = true;
-        video.loop = true;
-        video.preload = "metadata";
-        video.muted = true;
-        video.setAttribute("aria-label", row.title || "Naija Vibes video");
-
-        if (!row._url) video.style.display = "none";
+        if (row._url) {
+          const video = document.createElement("video");
+          video.src = row._url;
+          video.controls = true;
+          video.playsInline = true;
+          video.loop = true;
+          video.preload = "metadata";
+          video.muted = true;
+          video.setAttribute("aria-label", row.title || "Naija Vibes video");
+          card.appendChild(video);
+        }
 
         const shade = document.createElement("div");
         shade.className = "shade";
@@ -385,45 +481,55 @@
         const rail = document.createElement("div");
         rail.className = "rail";
         rail.innerHTML = `
-          <button class="action" aria-label="Like video" onclick="likeVideo('${escapeHTML(row.id)}',this)">
+          <button class="action" aria-label="Like video">
             <span class="emoji">❤️</span><small>Like</small>
           </button>
-          <button class="action" aria-label="Comments" onclick="openComments('${escapeHTML(row.id)}')">
+          <button class="action" aria-label="Comments">
             <span class="emoji">💬</span><small>Comment</small>
           </button>
-          <button class="action" aria-label="Share video" onclick="shareVideo('${escapeHTML(row.id)}')">
+          <button class="action" aria-label="Share video">
             <span class="emoji">↗️</span><small>Share</small>
           </button>
-          <button class="action" aria-label="Sound" onclick="trySound('${escapeHTML(row.id)}')">
+          <button class="action" aria-label="Sound">
             <span class="emoji">🎵</span><small>Sound</small>
           </button>`;
 
-        card.append(video, shade, details, rail);
+        const actions = rail.querySelectorAll("button");
+        actions[0].onclick = () => likeVideo(row.id, actions[0]);
+        actions[1].onclick = () => openComments(row.id);
+        actions[2].onclick = () => shareVideo(row.id);
+        actions[3].onclick = () => trySound(row.id);
+
+        card.append(shade, details, rail);
         $("feed").appendChild(card);
       });
 
-      // Pause videos outside the visible part of the feed.
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          const video = entry.target.querySelector("video");
-          if (!video) return;
-          if (entry.isIntersecting) {
-            document.querySelectorAll("#feed video").forEach(v => {
-              if (v !== video) v.pause();
-            });
-          } else {
-            video.pause();
-          }
-        });
-      }, { threshold: 0.65 });
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            const video = entry.target.querySelector("video");
+            if (!video) return;
 
-      document.querySelectorAll(".video-card").forEach(card => observer.observe(card));
+            if (entry.isIntersecting) {
+              document.querySelectorAll("#feed video").forEach(v => {
+                if (v !== video) v.pause();
+              });
+            } else {
+              video.pause();
+            }
+          });
+        }, { threshold: 0.65 });
+
+        document.querySelectorAll("#feed .video-card").forEach(card => observer.observe(card));
+      }
     }
 
     async function likeVideo(videoId, button) {
-      if (!db) return alert("Set your Publishable key first.");
+      if (!db) return alert("Add your Publishable key first.");
+
       const { data, error } = await db.auth.getUser();
       const user = data?.user;
+
       if (error || !user) {
         openPanel("accountPanel");
         return message("accountStatus", "Log in to like videos.");
@@ -443,12 +549,14 @@
           .from("video_likes")
           .delete()
           .eq("id", existing.id);
+
         if (deleteError) return alert(deleteError.message);
         button.classList.remove("liked");
       } else {
         const { error: insertError } = await db
           .from("video_likes")
           .insert({ video_id: videoId, user_id: user.id });
+
         if (insertError) return alert("Like failed: " + insertError.message);
         button.classList.add("liked");
       }
@@ -458,9 +566,12 @@
       activeCommentVideo = videoId;
       openPanel("commentsPanel");
       message("commentStatus", "");
-      $("commentsList").innerHTML = "<p class='muted'>Loading comments…</p>";
+      $("commentsList").textContent = "Loading comments…";
 
-      if (!db) return $("commentsList").textContent = "Add your Publishable key first.";
+      if (!db) {
+        $("commentsList").textContent = "Add your Publishable key first.";
+        return;
+      }
 
       const { data, error } = await db
         .from("comments")
@@ -474,24 +585,38 @@
       }
 
       $("commentsList").innerHTML = "";
+
       (data || []).forEach(comment => {
         const item = document.createElement("div");
         item.className = "comment-row";
-        item.innerHTML = `<div>${escapeHTML(comment.content || comment.text || "")}</div>
-          <small>${escapeHTML(comment.created_at || "")}</small>`;
+
+        const content = document.createElement("div");
+        content.textContent = comment.content || comment.text || "";
+
+        const date = document.createElement("small");
+        date.textContent = comment.created_at || "";
+
+        item.append(content, date);
         $("commentsList").appendChild(item);
       });
 
-      if (!data?.length) $("commentsList").innerHTML = "<p class='muted'>No comments yet. Start the conversation!</p>";
+      if (!data?.length) {
+        $("commentsList").textContent = "No comments yet. Start the conversation!";
+      }
     }
 
     async function postComment() {
       if (!db) return message("commentStatus", "Add your Publishable key first.");
+
       const { data, error: authError } = await db.auth.getUser();
       const user = data?.user;
-      if (authError || !user) return message("commentStatus", "Log in before commenting.");
+
+      if (authError || !user) {
+        return message("commentStatus", "Log in before commenting.");
+      }
 
       const content = $("commentText").value.trim();
+
       if (!content) return message("commentStatus", "Write a comment first.");
 
       const { error } = await db.from("comments").insert({
@@ -507,13 +632,18 @@
     }
 
     async function shareVideo(videoId) {
-      const link = location.origin + location.pathname + "?video=" + encodeURIComponent(videoId);
+      const link = location.origin + location.pathname +
+        "?video=" + encodeURIComponent(videoId);
+
       try {
         if (navigator.share) {
-          await navigator.share({ title: "Naija Vibes", text: "Check out this video on Naija Vibes!", url: link });
+          await navigator.share({
+            title: "Naija Vibes",
+            text: "Check out this video on Naija Vibes!",
+            url: link
+          });
         } else {
-          await navigator.clipboard.writeText(link);
-          alert("Video link copied!");
+          prompt("Copy this video link:", link);
         }
       } catch (error) {
         if (error.name !== "AbortError") prompt("Copy this video link:", link);
@@ -523,21 +653,23 @@
     function trySound(videoId) {
       const row = allVideos.find(v => String(v.id) === String(videoId));
       if (!row) return;
-      alert("Sound: " + (row.sound_label || "Original sound") +
-        "\nYou can use this label as inspiration for your own video.");
+
+      alert("Sound: " + (row.sound_label || "Original sound"));
     }
 
     function filterVideos() {
       const term = $("searchTerm").value.toLowerCase().trim();
+
       const filtered = allVideos.filter(row =>
         String(row.title || "").toLowerCase().includes(term) ||
         String(row.description || "").toLowerCase().includes(term)
       );
+
       closePanels();
       renderVideos(filtered);
+      showHome();
     }
 
-    // Show login status when a session changes.
     if (db) {
       db.auth.onAuthStateChange((_event, session) => {
         currentUser = session?.user || null;
@@ -549,4 +681,4 @@
 </body>
 </html>
 
-  
+    
